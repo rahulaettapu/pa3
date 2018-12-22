@@ -1,0 +1,33 @@
+Q1)
+	a)Another method to curb priority inversion in Real Time Operating Systems is Priority Ceiling. In this method, the shared mutex/semaphore process has high priority of its own which is assigned to the task locking the mutex/semaphore. For example, ceil(s) is the priority of the highest priority task that uses the semaphore. 
+	If a process p wants to lock a semaphore s, it can only do if the priority(p) is higher than the ceilings of all semaphores currently locked by other processes. If not current process p will be blocked from acquiring the semaphore s. Now the process currently holding the semaphore s will inherit the priority of process A. 
+
+
+	b)     Say we have processes with priorities in following order A-20, B-30 and C-40 and resumed in the order A<BC. Now let A,B are put to sleep and when C comes it is not able to acquire the lock untill A releases it. Now after the priority inversion update A's priority becomes 40 and is scheduled first before proccess B. This is in the case of locks. In the below result it is clearly seen after C is trying to acquire the lock A runs.
+		In the case of semaphores, as priority of B is greater than that of A , B will be scheduled after C is not able to acquire the lock.
+
+ Using Lock Results
+A: Requesting the lock, sleep 2s
+A: acquired the lock, sleep 2s
+C: Requesting the lock, sleep 2s
+A: to release lock
+C: acquired the lock, sleep 2s
+C: to release lock
+  B: acquired lock, sleep 2s
+  B: to release lock
+Locks test done
+
+ Using semaphores results
+A: Requesting the lock, sleep 2s
+A: acquired the lock (semaphore), sleep 2s
+C: Requesting the lock, sleep 2s
+  B: acquired lock, sleep 2s
+A: to release lock
+C: acquired the lock (semaphore), sleep 2s
+C: to release lock
+  B: to release lock
+ Done.
+
+
+
+Q2)   Consider there are 2 threads t1, t2 which are readers concurrently executing. If both of these threads have called the do_update function and internally called the buffer_add function using the try_update. If thread t1 is updating the length of the buffer and in meantime t2 also starts executing before t1 could finish. Now t1 who is in control after returning does not recognize  the changes that were made by t2. Assuming the changes made by t1 itself, it wrongly updates the buffer length which was altered by thread t2. This improper synchronization leads to inconsistencies in the output.
